@@ -1,1 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CSS Animation with JavaScript and localStorage</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 50px;
+  }
+
+  /* Ball styling */
+  .ball {
+    width: 50px;
+    height: 50px;
+    background-color: #ff5722;
+    border-radius: 50%;
+    margin: 0 auto 30px;
+    position: relative;
+  }
+
+  /* Animation keyframes */
+  @keyframes bounce {
+    0%, 100% {
+      top: 0;
+      animation-timing-function: ease-in;
+    }
+    50% {
+      top: 150px;
+      animation-timing-function: ease-out;
+    }
+  }
+
+  /* Class to trigger animation */
+  .animate {
+    animation: bounce 1s ease-in-out forwards;
+  }
+
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  #count {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #333;
+  }
+</style>
+</head>
+<body>
+
+<h1>Bouncing Ball Animation</h1>
+
+<div class="ball" id="ball"></div>
+
+<button id="animateBtn">Bounce Ball</button>
+
+<div id="count">Animation triggered 0 times.</div>
+
+<script>
+  const ball = document.getElementById('ball');
+  const btn = document.getElementById('animateBtn');
+  const countDisplay = document.getElementById('count');
+
+  // Load count from localStorage or start at 0
+  let count = localStorage.getItem('animationCount') || 0;
+  countDisplay.textContent = `Animation triggered ${count} times.`;
+
+  btn.addEventListener('click', () => {
+    // Remove the class to allow re-triggering animation
+    ball.classList.remove('animate');
+
+    // Trigger reflow to restart animation
+    void ball.offsetWidth;
+
+    // Add class to start animation
+    ball.classList.add('animate');
+
+    // Update count
+    count++;
+    localStorage.setItem('animationCount', count);
+    countDisplay.textContent = `Animation triggered ${count} times.`;
+  });
+
+  // Optional: Remove animation class after it ends (so it can be re-triggered)
+  ball.addEventListener('animationend', () => {
+    ball.classList.remove('animate');
+  });
+</script>
+
+</body>
+</html>
 
